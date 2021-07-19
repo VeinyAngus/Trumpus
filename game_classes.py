@@ -48,3 +48,25 @@ class Trump:
             if self.jump_vel == -21:  # If we have reached our starting position, reset jump velocity/set to false
                 self.jump_vel = 20
                 self.jumping = False
+
+
+class Declaration:
+    def __init__(self):
+        self.x = random.randint(900, 3000)
+        self.y = random.randint(415, 550)
+        self.rect = pygame.Rect(self.x, self.y, 50, 50)
+        self.img = pygame.image.load('Assets/declaration.png').convert_alpha()
+
+    def update_rect(self):
+        self.rect = pygame.Rect(self.x, self.y, 50, 100)
+
+    def draw(self, s):
+        self.update_rect()
+        s.blit(self.img, (self.x, self.y))
+
+    def move(self, s):
+        self.x -= 1
+        self.update_rect()
+        self.draw(s)
+        if self.x < -50:
+            return True
