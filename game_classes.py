@@ -5,14 +5,17 @@ import random
 class Trump:
     def __init__(self):
         self.x = 250
-        self.y = 415
-        self.x_vel = 10
+        self.y = 370
+        self.x_vel = 5
         self.y_vel = 5
         self.rect = pygame.Rect(self.x, self.y, 50, 100)
         self.lives = 3
+        self.money = 5
+        self.money_shot = []
         self.img = pygame.image.load('Assets/trump.png').convert_alpha()
         self.jump_vel = 20
         self.jumping = False
+        self.wave = 0
 
     def update_rect(self):
         self.rect = pygame.Rect(self.x, self.y, 50, 100)
@@ -32,7 +35,7 @@ class Trump:
         if self.jumping:
             pass
         else:
-            if keys[pygame.K_w] and self.y - self.y_vel > 415:
+            if keys[pygame.K_w] and self.y - self.y_vel > 370:
                 self.y -= self.y_vel
                 self.draw(s)
             if keys[pygame.K_s] and self.y + self.y_vel < 500:
@@ -53,20 +56,73 @@ class Trump:
 class Declaration:
     def __init__(self):
         self.x = random.randint(900, 3000)
-        self.y = random.randint(415, 550)
+        self.y = random.randint(400, 550)
         self.rect = pygame.Rect(self.x, self.y, 50, 50)
         self.img = pygame.image.load('Assets/declaration.png').convert_alpha()
+        self.burn_img = pygame.image.load('Assets/burnedec.png').convert_alpha()
+        self.timer = False
+        self.its = 0
 
     def update_rect(self):
-        self.rect = pygame.Rect(self.x, self.y, 50, 100)
+        self.rect = pygame.Rect(self.x, self.y, 50, 50)
+
+    def draw(self, s):
+        if self.timer is False:
+            self.update_rect()
+            s.blit(self.img, (self.x, self.y))
+            return False
+        elif self.timer:
+            self.update_rect()
+            s.blit(self.burn_img, (self.x, self.y))
+            self.its += 1
+            if self.its >= 30:
+                return True
+
+    def move(self, s):
+        self.x -= 2
+        self.update_rect()
+        if self.x < -50:
+            return True
+
+
+class Moneybag:
+    def __init__(self):
+        self.x = random.randint(900, 3000)
+        self.y = random.randint(370, 550)
+        self.rect = pygame.Rect(self.x, self.y, 50, 50)
+        self.img = pygame.image.load('Assets/moneybag.png').convert_alpha()
+
+    def update_rect(self):
+        self.rect = pygame.Rect(self.x, self.y, 50, 50)
 
     def draw(self, s):
         self.update_rect()
         s.blit(self.img, (self.x, self.y))
 
     def move(self, s):
-        self.x -= 1
-        self.update_rect()
+        self.x -= 2
         self.draw(s)
         if self.x < -50:
+            return True
+
+
+class Bill:
+    def __init__(self, t):
+        self.x = t.x + 28
+        self.y = t.y + 45
+        self.vel = 10
+        self.rect = pygame.Rect(self.x, self.y, 35, 15)
+        self.img = pygame.image.load('Assets/bill-35-15.png')
+
+    def update_rect(self):
+        self.rect = pygame.Rect(self.x, self.y, 35, 15)
+
+    def draw(self, s):
+        self.update_rect()
+        s.blit(self.img, (self.x, self.y))
+
+    def move(self, s):
+        self.x += self.vel
+        self.draw(s)
+        if self.x > 800:
             return True
