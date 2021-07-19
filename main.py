@@ -8,16 +8,26 @@ pygame.init()
 screen = pygame.display.set_mode((800, 600))
 clock = pygame.time.Clock()
 
+# Load background
+
+bg = pygame.image.load('Assets/background.png').convert_alpha()
+
 # Create game objects
 
 trump = Trump()
 
 # Main Game Loop
 
+i = 0
 running = True
 while running:
     clock.tick(60)  # Set FPS To 60
-    screen.fill((0, 0, 0))  # Fill screen with black for the time being until background is created
+    screen.blit(bg, (i, 0))
+    screen.blit(bg, (800 + i, 0))
+    i -= 1
+    if i == -800:
+        screen.blit(bg, (800 + i, 0))
+        i = 0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
