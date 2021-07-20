@@ -126,3 +126,48 @@ class Bill:
         self.draw(s)
         if self.x > 800:
             return True
+
+
+class Bullet:
+    def __init__(self, a):
+        self.x = a.x - 6
+        self.y = a.y + 33
+        self.vel = 5
+        self.rect = pygame.Rect(self.x, self.y, 10, 5)
+        self.img = pygame.image.load('Assets/bullet.png').convert_alpha()
+
+    def update_rect(self):
+        self.rect = pygame.Rect(self.x, self.y, 10, 5)
+
+    def draw(self, s):
+        self.update_rect()
+        s.blit(self.img, (self.x, self.y))
+
+    def move(self, s):
+        self.x -= self.vel
+        self.draw(s)
+        if self.x < 0:
+            return True
+
+
+class SecretService:
+    def __init__(self):
+        self.x = random.randint(900, 3000)
+        self.y = random.randint(400, 500)
+        self.rect = pygame.Rect(self.x, self.y, 50, 100)
+        self.img = pygame.image.load('Assets/agent.png').convert_alpha()
+        self.shoot_hold = False
+        self.shots = []
+
+    def update_rect(self):
+        self.rect = pygame.Rect(self.x, self.y, 50, 100)
+
+    def draw(self, s):
+        self.update_rect()
+        s.blit(self.img, (self.x, self.y))
+
+    def move(self, s):
+        self.x -= 2
+        self.draw(s)
+        if self.x < -50:
+            return True
