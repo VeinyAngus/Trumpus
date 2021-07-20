@@ -9,7 +9,7 @@ class Trump:
         self.x_vel = 5
         self.y_vel = 5
         self.rect = pygame.Rect(self.x, self.y, 50, 100)
-        self.lives = 3
+        self.lives = 5
         self.money = 5
         self.money_shot = []
         self.img = pygame.image.load('Assets/trump.png').convert_alpha()
@@ -132,7 +132,7 @@ class Bullet:
     def __init__(self, a):
         self.x = a.x - 6
         self.y = a.y + 33
-        self.vel = 5
+        self.vel = 6
         self.rect = pygame.Rect(self.x, self.y, 10, 5)
         self.img = pygame.image.load('Assets/bullet.png').convert_alpha()
 
