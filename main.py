@@ -1,5 +1,5 @@
 import pygame
-from game_classes import Trump, Declaration, Moneybag, Bill, SecretService, Bullet
+from game_classes import Trump, Declaration, Moneybag, Bill, SecretService, Bullet, Heart
 import random
 
 # Initialize Pygame, create screen and clock objects
@@ -19,6 +19,7 @@ lose = pygame.image.load('Assets/youlose.png').convert_alpha()
 level2bg = pygame.image.load('Assets/level2bg.png').convert_alpha()
 level3bg = pygame.image.load('Assets/level3bg.png').convert_alpha()
 level3bg2 = pygame.image.load('Assets/level3bg2.png').convert_alpha()
+agent_img = pygame.image.load('Assets/agent.png').convert_alpha()
 pygame.mixer.set_num_channels(16)
 pygame.mixer.music.load('Assets/level1.mp3')
 moneycollect = pygame.mixer.Sound('Assets/moneycollect.ogg')
@@ -28,6 +29,8 @@ throw = pygame.mixer.Sound('Assets/throw.ogg')
 shot = pygame.mixer.Sound('Assets/gunshot.ogg')
 okay = pygame.mixer.Sound('Assets/okay.ogg')
 scream = pygame.mixer.Sound('Assets/scream.ogg')
+jump = pygame.mixer.Sound('Assets/jump.ogg')
+collect_heart = pygame.mixer.Sound('Assets/collect_heart.ogg')
 moneyfont = pygame.font.SysFont('comicsans', 50)
 
 
@@ -92,6 +95,33 @@ def level_one_win():
         pygame.display.update()
 
 
+def level_two_win():
+    pygame.mixer.music.stop()
+    pygame.mixer.music.load('Assets/yankeedoodle.mp3')
+    pygame.mixer.music.play(-1)
+    i = 0
+    running = True
+    while running:
+        clock.tick(60)  # Set FPS To 60
+        screen.blit(level2bg, (i, 0))
+        screen.blit(level2bg, (3200 + i, 0))
+        win_label = moneyfont.render(f'Level Two Complete', True, (255, 255, 255))
+        win_label2 = moneyfont.render(f'Press Space To Continue', True, (255, 255, 255))
+        screen.blit(win_label, (250, 200))
+        screen.blit(win_label2, (195, 300))
+        i -= 2
+        if i == -3200:
+            screen.blit(bg, (3200 + i, 0))
+            i = 0
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return 'quit'
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    return 'next'
+        pygame.display.update()
+
+
 def level_one():
     pygame.mixer.music.load('Assets/level1.mp3')
     pygame.mixer.music.play(-1)
@@ -128,6 +158,7 @@ def level_one():
                         pass
                     else:
                         trump.jumping = True
+                        jump.play()
                 if event.key == pygame.K_SPACE:
                     if trump.money > 0:
                         trump.money_shot.append(Bill(trump))
@@ -161,7 +192,7 @@ def level_one():
                 bags.remove(b)
                 moneycollect.play()
                 trump.money += 3
-                if trump.money >= 6:
+                if trump.money >= 30:
                     return 'win'
             if off_screen:
                 bags.remove(b)
@@ -190,11 +221,14 @@ def level_two():
     decs = [Declaration() for _ in range(11)]
     bags = [Moneybag() for _ in range(9)]
     agents = [SecretService() for _ in range(3)]
+    hearts = [Heart() for _ in range(3)]
     bullets = []
+    obj_timer = 0
     i = 0
-    counter = 5000
+    counter = 4000
     running = True
     while running:
+        obj_timer += 1
         eta = clock.tick(60)  # Set FPS To 60
         screen.blit(level2bg, (i, 0))
         screen.blit(level2bg, (3200 + i, 0))
@@ -204,6 +238,9 @@ def level_two():
         heart_label = moneyfont.render(f'{trump.lives}', True, (255, 255, 255))
         screen.blit(money_label, (95, 12))
         screen.blit(heart_label, (715, 10))
+        if obj_timer < 400:
+            obj_label = moneyfont.render(f'Collect $60 To Advance', True, (0, 255, 0))
+            screen.blit(obj_label, (225, 12))
         i -= 2
         if i == -3200:
             screen.blit(level2bg, (3200 + i, 0))
@@ -217,6 +254,7 @@ def level_two():
                         pass
                     else:
                         trump.jumping = True
+                        jump.play()
                 if event.key == pygame.K_SPACE:
                     if trump.money > 0:
                         trump.money_shot.append(Bill(trump))
@@ -251,7 +289,7 @@ def level_two():
                 if a.x < 1200:
                     bullets.append(Bullet(a))
                     shot.play()
-                    counter += 5000
+                    counter += 4000
             if off_screen:
                 agents.remove(a)
             for m in trump.money_shot[:]:
@@ -273,7 +311,7 @@ def level_two():
                 bags.remove(b)
                 moneycollect.play()
                 trump.money += 4
-                if trump.money >= 6:
+                if trump.money >= 60:
                     return 'win'
             if off_screen:
                 bags.remove(b)
@@ -281,6 +319,12 @@ def level_two():
             off_screen = m.move(screen)
             if off_screen:
                 trump.money_shot.remove(m)
+        for h in hearts[:]:
+            h.move(screen)
+            if h.rect.colliderect(trump.rect):
+                trump.lives += 1
+                hearts.remove(h)
+                collect_heart.play()
         if len(decs) <= 0:
             trump.wave += 2
             decs = [Declaration() for _ in range(10 + trump.wave)]
@@ -298,17 +342,20 @@ def level_two():
 
 
 def level_three():
-    pygame.mixer.music.load('Assets/level2.mp3')
+    pygame.mixer.music.load('Assets/level3.mp3')
     pygame.mixer.music.play(-1)
     trump = Trump()
-    decs = [Declaration() for _ in range(9)]
-    bags = [Moneybag() for _ in range(9)]
+    decs = [Declaration() for _ in range(5)]
+    bags = [Moneybag() for _ in range(11)]
     agents = [SecretService() for _ in range(5)]
+    hearts = [Heart() for _ in range(5)]
     bullets = []
+    obj_timer = 0
     i = 0
     counter = 3000
     running = True
     while running:
+        obj_timer += 1
         eta = clock.tick(60)  # Set FPS To 60
         screen.blit(level3bg2, (0, 0))
         screen.blit(level3bg, (i, 0))
@@ -317,8 +364,13 @@ def level_three():
         screen.blit(heart, (750, 10))
         money_label = moneyfont.render(f'${trump.money}', True, (0, 255, 0))
         heart_label = moneyfont.render(f'{trump.lives}', True, (255, 0, 0))
+        agents_label = moneyfont.render(f'Agents Left: {trump.agents_left}', True, (255, 255, 255))
         screen.blit(money_label, (95, 12))
         screen.blit(heart_label, (715, 10))
+        screen.blit(agents_label, (10, 550))
+        if obj_timer < 400:
+            obj_label = moneyfont.render(f'Kill All Agents', True, (0, 255, 50))
+            screen.blit(obj_label, (275, 12))
         i -= 2
         if i == -3200:
             screen.blit(level3bg, (3200 + i, 0))
@@ -332,6 +384,7 @@ def level_three():
                         pass
                     else:
                         trump.jumping = True
+                        jump.play()
                 if event.key == pygame.K_SPACE:
                     if trump.money > 0:
                         trump.money_shot.append(Bill(trump))
@@ -366,7 +419,7 @@ def level_three():
                 if a.x < 1200:
                     bullets.append(Bullet(a))
                     shot.play()
-                    counter += 5000
+                    counter += 3000
             if off_screen:
                 agents.remove(a)
             for m in trump.money_shot[:]:
@@ -374,6 +427,9 @@ def level_three():
                     agents.remove(a)
                     scream.play()
                     trump.money_shot.remove(m)
+                    trump.agents_left -= 1
+                    if trump.agents_left <= 0:
+                        return 'win'
                 else:
                     pass
         for b in bullets[:]:
@@ -388,19 +444,23 @@ def level_three():
                 bags.remove(b)
                 moneycollect.play()
                 trump.money += 4
-                if trump.money >= 100:
-                    return 'win'
             if off_screen:
                 bags.remove(b)
         for m in trump.money_shot[:]:
             off_screen = m.move(screen)
             if off_screen:
                 trump.money_shot.remove(m)
+        for h in hearts[:]:
+            h.move(screen)
+            if h.rect.colliderect(trump.rect):
+                trump.lives += 1
+                hearts.remove(h)
+                collect_heart.play()
         if len(decs) <= 0:
             trump.wave += 2
-            decs = [Declaration() for _ in range(9 + trump.wave)]
+            decs = [Declaration() for _ in range(5 + trump.wave)]
         if len(bags) <= 0:
-            bags = [Moneybag() for _ in range(9)]
+            bags = [Moneybag() for _ in range(11)]
         if len(agents) <= 0:
             agents = [SecretService() for _ in range(5)]
         if trump.jumping:
@@ -433,7 +493,9 @@ while True:
                     if lose_screen_result == 'quit':
                         break
                 if level_two_result == 'win':
-                    level_three()
+                    win_result = level_two_win()
+                    if win_result == 'next':
+                        level_three_result = level_three()
                 if level_two_result == 'quit':
                     break
             if win_result == 'quit':

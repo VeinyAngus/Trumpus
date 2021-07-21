@@ -16,6 +16,7 @@ class Trump:
         self.jump_vel = 20
         self.jumping = False
         self.wave = 0
+        self.agents_left = 25
 
     def update_rect(self):
         self.rect = pygame.Rect(self.x, self.y, 50, 100)
@@ -161,6 +162,27 @@ class SecretService:
 
     def update_rect(self):
         self.rect = pygame.Rect(self.x, self.y, 50, 100)
+
+    def draw(self, s):
+        self.update_rect()
+        s.blit(self.img, (self.x, self.y))
+
+    def move(self, s):
+        self.x -= 2
+        self.draw(s)
+        if self.x < -50:
+            return True
+
+
+class Heart:
+    def __init__(self):
+        self.x = random.randint(900, 8000)
+        self.y = random.randint(400, 550)
+        self.rect = pygame.Rect(self.x, self.y, 25, 25)
+        self.img = pygame.image.load('Assets/heart.png').convert_alpha()
+
+    def update_rect(self):
+        self.rect = pygame.Rect(self.x, self.y, 25, 25)
 
     def draw(self, s):
         self.update_rect()
