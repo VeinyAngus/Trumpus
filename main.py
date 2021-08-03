@@ -225,7 +225,6 @@ def level_two():
     bullets = []
     obj_timer = 0
     i = 0
-    counter = 4000
     running = True
     while running:
         obj_timer += 1
@@ -284,12 +283,12 @@ def level_two():
                     trump.lives -= 1
         for a in agents[:]:
             off_screen = a.move(screen)
-            counter -= eta
-            if counter < 0:
+            a.counter -= eta
+            if a.counter < 0:
                 if a.x < 1200:
                     bullets.append(Bullet(a))
                     shot.play()
-                    counter += 4000
+                    a.counter += 4000
             if off_screen:
                 agents.remove(a)
             for m in trump.money_shot[:]:
@@ -352,7 +351,6 @@ def level_three():
     bullets = []
     obj_timer = 0
     i = 0
-    counter = 3000
     running = True
     while running:
         obj_timer += 1
@@ -414,12 +412,12 @@ def level_three():
                     trump.lives -= 1
         for a in agents[:]:
             off_screen = a.move(screen)
-            counter -= eta
-            if counter < 0:
+            a.counter -= eta
+            if a.counter < 0:
                 if a.x < 1200:
                     bullets.append(Bullet(a))
                     shot.play()
-                    counter += 3000
+                    a.counter += 3000
             if off_screen:
                 agents.remove(a)
             for m in trump.money_shot[:]:

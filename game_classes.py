@@ -159,6 +159,7 @@ class SecretService:
         self.img = pygame.image.load('Assets/agent.png').convert_alpha()
         self.shoot_hold = False
         self.shots = []
+        self.counter = 4000
 
     def update_rect(self):
         self.rect = pygame.Rect(self.x, self.y, 50, 100)
