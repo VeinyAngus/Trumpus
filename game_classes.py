@@ -155,9 +155,11 @@ class SecretService:
     def __init__(self):
         self.x = random.randint(900, 3000)
         self.y = random.randint(400, 500)
+        # self.x = 300
+        # self.y = 300
         self.rect = pygame.Rect(self.x, self.y, 50, 100)
         self.img = pygame.image.load('Assets/agent.png').convert_alpha()
-        self.shoot_hold = False
+        self.shoot_hold = True
         self.shots = []
         self.counter = 4000
 
@@ -167,6 +169,10 @@ class SecretService:
     def draw(self, s):
         self.update_rect()
         s.blit(self.img, (self.x, self.y))
+
+    def shoot(self):
+        if not self.shoot_hold:
+            self.shots.append(Bullet(self))
 
     def move(self, s):
         self.x -= 2
