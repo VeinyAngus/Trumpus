@@ -311,6 +311,7 @@ def level_two():
                 a.shoot(bullets)
                 a.counter += 4000
                 a.shoot_hold = True
+                shot.play()
             if off_screen:
                 agents.remove(a)
             for m in trump.money_shot[:]:
@@ -443,6 +444,7 @@ def level_three():
                 a.shoot(bullets)
                 a.counter += 4000
                 a.shoot_hold = True
+                shot.play()
             if off_screen:
                 agents.remove(a)
             for m in trump.money_shot[:]:
@@ -450,6 +452,9 @@ def level_three():
                     agents.remove(a)
                     scream.play()
                     trump.money_shot.remove(m)
+                    trump.agents_left -= 1
+                    if trump.agents_left <= 0:
+                        return 'win'
                 else:
                     pass
         for b in bags[:]:
@@ -497,38 +502,38 @@ def level_three():
 """This code is kind-of a mess right now. The nested if/else blocks aren't exactly ideal, but for now it runs"""
 
 
-while True:
-    result = menu()
-    if result == 'play':
-        level_one_result = level_one()
-        if level_one_result == 'lost':
-            lose_screen_result = lose_screen()
-            if lose_screen_result == 'restart':
-                continue
-            if lose_screen_result == 'quit':
-                break
-        if level_one_result == 'win':
-            win_result = level_one_win()
-            if win_result == 'next':
-                level_two_result = level_two()
-                if level_two_result == 'lost':
-                    lose_screen_result = lose_screen()
-                    if lose_screen_result == 'restart':
-                        continue
-                    if lose_screen_result == 'quit':
-                        break
-                if level_two_result == 'win':
-                    win_result = level_two_win()
-                    if win_result == 'next':
-                        level_three_result = level_three()
-                if level_two_result == 'quit':
-                    break
-            if win_result == 'quit':
-                break
-        if level_one_result == 'quit':
-            break
-    else:
-        break
+# while True:
+#     result = menu()
+#     if result == 'play':
+#         level_one_result = level_one()
+#         if level_one_result == 'lost':
+#             lose_screen_result = lose_screen()
+#             if lose_screen_result == 'restart':
+#                 continue
+#             if lose_screen_result == 'quit':
+#                 break
+#         if level_one_result == 'win':
+#             win_result = level_one_win()
+#             if win_result == 'next':
+#                 level_two_result = level_two()
+#                 if level_two_result == 'lost':
+#                     lose_screen_result = lose_screen()
+#                     if lose_screen_result == 'restart':
+#                         continue
+#                     if lose_screen_result == 'quit':
+#                         break
+#                 if level_two_result == 'win':
+#                     win_result = level_two_win()
+#                     if win_result == 'next':
+#                         level_three_result = level_three()
+#                 if level_two_result == 'quit':
+#                     break
+#             if win_result == 'quit':
+#                 break
+#         if level_one_result == 'quit':
+#             break
+#     else:
+#         break
 
-
+level_three()
 pygame.quit()
