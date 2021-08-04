@@ -2,7 +2,11 @@ import pygame
 import random
 
 
+# -------------------------------------- TRUMP (PLAYER) CLASS ------------------------------------------ #
+
+
 class Trump:
+    """Our main player object"""
     def __init__(self):
         self.x = 250
         self.y = 370
@@ -19,13 +23,16 @@ class Trump:
         self.agents_left = 25
 
     def update_rect(self):
+        """Updates the objects Rect using the current x and y values"""
         self.rect = pygame.Rect(self.x, self.y, 50, 100)
 
     def draw(self, s):
+        """Draws the img attribute to screen on the current x and y values"""
         self.update_rect()
         s.blit(self.img, (self.x, self.y))
 
     def move(self, s):
+        """Corresponding key presses move player in multiple directions"""
         keys = pygame.key.get_pressed()
         if keys[pygame.K_d] and self.x + self.x_vel <= 750:
             self.x += self.x_vel
@@ -54,7 +61,12 @@ class Trump:
                 self.jumping = False
 
 
+# -------------------------------------- DECLARATION CLASS ------------------------------------------- #
+
+
 class Declaration:
+    """One of the enemy objects. This object moves in sync with the background to give an illusion
+    of being static in relation to the background"""
     def __init__(self):
         self.x = random.randint(900, 3000)
         self.y = random.randint(400, 550)
@@ -65,13 +77,17 @@ class Declaration:
         self.its = 0
 
     def update_rect(self):
+        """Updates the objects Rect using the current x and y values"""
         self.rect = pygame.Rect(self.x, self.y, 50, 50)
 
     def draw(self, s):
+        """Draws the img attribute to screen on the current x and y values"""
         if self.timer is False:
             self.update_rect()
             s.blit(self.img, (self.x, self.y))
             return False
+        # self.timer attribute will be true if struck by a projectile
+        # and will show the burn image for 30 frames
         elif self.timer:
             self.update_rect()
             s.blit(self.burn_img, (self.x, self.y))
@@ -80,13 +96,18 @@ class Declaration:
                 return True
 
     def move(self, s):
+        """x moves -2 for each game-loop to maintain pace with game background, so object appears static"""
         self.x -= 2
         self.update_rect()
         if self.x < -50:
             return True
 
 
+# ------------------------------------------ MONEYBAG CLASS ----------------------------------------------- #
+
+
 class Moneybag:
+    """Bag of money object. Player needs to collide with these to collect it"""
     def __init__(self):
         self.x = random.randint(900, 3000)
         self.y = random.randint(370, 550)
@@ -94,20 +115,27 @@ class Moneybag:
         self.img = pygame.image.load('Assets/moneybag.png').convert_alpha()
 
     def update_rect(self):
+        """Updates the objects Rect using the current x and y values"""
         self.rect = pygame.Rect(self.x, self.y, 50, 50)
 
     def draw(self, s):
+        """Draws the img attribute to screen on the current x and y values"""
         self.update_rect()
         s.blit(self.img, (self.x, self.y))
 
     def move(self, s):
+        """x moves -2 for each game-loop to maintain pace with game background, so object appears static"""
         self.x -= 2
         self.draw(s)
         if self.x < -50:
             return True
 
 
+# -------------------------------------------- BILL CLASS ------------------------------------------------ #
+
+
 class Bill:
+    """This is the projectile that is created when the player fires"""
     def __init__(self, t):
         self.x = t.x + 28
         self.y = t.y + 45
@@ -116,20 +144,28 @@ class Bill:
         self.img = pygame.image.load('Assets/bill-35-15.png')
 
     def update_rect(self):
+        """Updates the objects Rect using the current x and y values"""
         self.rect = pygame.Rect(self.x, self.y, 35, 15)
 
     def draw(self, s):
+        """Draws the img attribute to screen on the current x and y values"""
         self.update_rect()
         s.blit(self.img, (self.x, self.y))
 
     def move(self, s):
+        """Moves the projectile every frame. If the projectiles x value is greater than the width of the screen
+        we return True to demonstrate that the projectile has indeed gone off screen."""
         self.x += self.vel
         self.draw(s)
         if self.x > 800:
             return True
 
 
+# --------------------------------------- BULLET CLASS ----------------------------------------------- #
+
+
 class Bullet:
+    """This is the projectile shot by the SecretService agents"""
     def __init__(self, a):
         self.x = a.x - 6
         self.y = a.y + 33
@@ -138,20 +174,28 @@ class Bullet:
         self.img = pygame.image.load('Assets/bullet.png').convert_alpha()
 
     def update_rect(self):
+        """Updates the objects Rect using the current x and y values"""
         self.rect = pygame.Rect(self.x, self.y, 10, 5)
 
     def draw(self, s):
+        """Draws the img attribute to screen on the current x and y values"""
         self.update_rect()
         s.blit(self.img, (self.x, self.y))
 
     def move(self, s):
+        """Moves the projectile every frame. If the projectiles x value is less than the width of the screen
+                we return True to demonstrate that the projectile has indeed gone off screen."""
         self.x -= self.vel
         self.draw(s)
         if self.x < 0:
             return True
 
 
+# --------------------------------------- SECRET SERVICE CLASS -------------------------------------------- #
+
+
 class SecretService:
+    """One of the main enemy objects. These objects shoot Bullets() at set intervals"""
     def __init__(self):
         self.x = random.randint(900, 3000)
         self.y = random.randint(400, 500)
@@ -164,24 +208,33 @@ class SecretService:
         self.counter = 4000
 
     def update_rect(self):
+        """Updates the objects Rect using the current x and y values"""
         self.rect = pygame.Rect(self.x, self.y, 50, 100)
 
     def draw(self, s):
+        """Draws the img attribute to screen on the current x and y values"""
         self.update_rect()
         s.blit(self.img, (self.x, self.y))
 
     def shoot(self):
+        """If the self.shoot_hold attribute is not True (attribute is set to true in main game loop
+        when bullet is fired until the self.counter attribute reaches 0) then a Bullet() object is created
+        in self.shots"""
         if not self.shoot_hold:
             self.shots.append(Bullet(self))
 
     def move(self, s):
+        """x moves -2 for each game-loop to maintain pace with game background, so object appears static"""
         self.x -= 2
         self.draw(s)
         if self.x < -50:
             return True
 
+# ------------------------------------------ HEART CLASS ------------------------------------------- #
+
 
 class Heart:
+    """This appears on screen and if a player collides with it, they are granted an additional life"""
     def __init__(self):
         self.x = random.randint(900, 8000)
         self.y = random.randint(400, 550)
@@ -189,13 +242,16 @@ class Heart:
         self.img = pygame.image.load('Assets/heart.png').convert_alpha()
 
     def update_rect(self):
+        """Updates the objects Rect using the current x and y values"""
         self.rect = pygame.Rect(self.x, self.y, 25, 25)
 
     def draw(self, s):
+        """Draws the img attribute to screen on the current x and y values"""
         self.update_rect()
         s.blit(self.img, (self.x, self.y))
 
     def move(self, s):
+        """x moves -2 for each game-loop to maintain pace with game background, so object appears static"""
         self.x -= 2
         self.draw(s)
         if self.x < -50:
