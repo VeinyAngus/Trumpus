@@ -244,6 +244,7 @@ def level_two():
     bags = [Moneybag() for _ in range(9)]
     agents = [SecretService() for _ in range(3)]
     hearts = [Heart() for _ in range(3)]
+    bullets = []
     obj_timer = 0
     i = 0
     running = True
@@ -307,15 +308,9 @@ def level_two():
             a.counter -= eta
             if a.counter <= 0:
                 a.shoot_hold = False
-                a.shoot()
+                a.shoot(bullets)
                 a.counter += 4000
                 a.shoot_hold = True
-            for b in a.shots[:]:
-                b.move(screen)
-                if b.rect.colliderect(trump.rect):
-                    a.shots.remove(b)
-                    okay.play()
-                    trump.lives -= 1
             if off_screen:
                 agents.remove(a)
             for m in trump.money_shot[:]:
@@ -339,6 +334,12 @@ def level_two():
             off_screen = m.move(screen)
             if off_screen:
                 trump.money_shot.remove(m)
+        for b in bullets[:]:
+            b.move(screen)
+            if b.rect.colliderect(trump.rect):
+                bullets.remove(b)
+                okay.play()
+                trump.lives -= 1
         for h in hearts[:]:
             h.move(screen)
             if h.rect.colliderect(trump.rect):
@@ -372,6 +373,7 @@ def level_three():
     bags = [Moneybag() for _ in range(11)]
     agents = [SecretService() for _ in range(5)]
     hearts = [Heart() for _ in range(5)]
+    bullets = []
     obj_timer = 0
     i = 0
     running = True
@@ -438,15 +440,9 @@ def level_three():
             a.counter -= eta
             if a.counter <= 0:
                 a.shoot_hold = False
-                a.shoot()
+                a.shoot(bullets)
                 a.counter += 4000
                 a.shoot_hold = True
-            for b in a.shots[:]:
-                b.move(screen)
-                if b.rect.colliderect(trump.rect):
-                    a.shots.remove(b)
-                    okay.play()
-                    trump.lives -= 1
             if off_screen:
                 agents.remove(a)
             for m in trump.money_shot[:]:
@@ -468,6 +464,12 @@ def level_three():
             off_screen = m.move(screen)
             if off_screen:
                 trump.money_shot.remove(m)
+        for b in bullets[:]:
+            b.move(screen)
+            if b.rect.colliderect(trump.rect):
+                bullets.remove(b)
+                okay.play()
+                trump.lives -= 1
         for h in hearts[:]:
             h.move(screen)
             if h.rect.colliderect(trump.rect):

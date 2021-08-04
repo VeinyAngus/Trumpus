@@ -216,12 +216,12 @@ class SecretService:
         self.update_rect()
         s.blit(self.img, (self.x, self.y))
 
-    def shoot(self):
+    def shoot(self, b):
         """If the self.shoot_hold attribute is not True (attribute is set to true in main game loop
         when bullet is fired until the self.counter attribute reaches 0) then a Bullet() object is created
-        in self.shots"""
+        in and appended to the list (argument b)"""
         if not self.shoot_hold:
-            self.shots.append(Bullet(self))
+            b.append(Bullet(self))
 
     def move(self, s):
         """x moves -2 for each game-loop to maintain pace with game background, so object appears static"""
