@@ -1,14 +1,19 @@
-import pygame
-from game_classes import Trump, Declaration, Moneybag, Bill, SecretService, Bullet, Heart
-import random
+"""
+This game is still a work in progress. All code here is subject to change. I welcome any and all advice/feedback.
+Please fork and do a PR if you have any changes you'd like to implement.
+                                -VeinyAngus (MattMuelot)
+"""
 
-# Initialize Pygame, create screen and clock objects
+import pygame
+from game_classes import Trump, Declaration, Moneybag, Bill, SecretService, Heart
+
+# ------------- Initialize Pygame, create screen and clock objects --------------#
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
 clock = pygame.time.Clock()
 
-# Load background and audio files
+# -------------- Load image and audio files ------------------#
 
 bg = pygame.image.load('Assets/background.png').convert_alpha()
 bg2 = pygame.image.load('Assets/background2.png').convert_alpha()
@@ -20,7 +25,7 @@ level2bg = pygame.image.load('Assets/level2bg.png').convert_alpha()
 level3bg = pygame.image.load('Assets/level3bg.png').convert_alpha()
 level3bg2 = pygame.image.load('Assets/level3bg2.png').convert_alpha()
 agent_img = pygame.image.load('Assets/agent.png').convert_alpha()
-pygame.mixer.set_num_channels(16)
+pygame.mixer.set_num_channels(16)  # Set number of audio channels to 16 to avoid sound loss
 pygame.mixer.music.load('Assets/level1.mp3')
 moneycollect = pygame.mixer.Sound('Assets/moneycollect.ogg')
 burn = pygame.mixer.Sound('Assets/burn.ogg')
@@ -31,10 +36,13 @@ okay = pygame.mixer.Sound('Assets/okay.ogg')
 scream = pygame.mixer.Sound('Assets/scream.ogg')
 jump = pygame.mixer.Sound('Assets/jump.ogg')
 collect_heart = pygame.mixer.Sound('Assets/collect_heart.ogg')
-moneyfont = pygame.font.SysFont('comicsans', 50)
+moneyfont = pygame.font.SysFont('comicsans', 50)  # Master font created
+
+# -------------------------------------- MAIN MENU SCREEN ---------------------------------------- #
 
 
 def menu():
+    """Main menu function that is run when the game is started"""
     pygame.mixer.music.load('Assets/starspangled.mp3')
     pygame.mixer.music.play(-1)
     running = True
@@ -50,7 +58,11 @@ def menu():
         pygame.display.update()
 
 
+# ----------------------------------------- GAME LOST SCREEN ---------------------------------------- #
+
+
 def lose_screen():
+    """If the game is lost, this screen runs and then returns you to the main menu screen"""
     pygame.mixer.music.stop()
     pygame.mixer.music.load('Assets/lose.mp3')
     pygame.mixer.music.play(-1)
@@ -67,7 +79,11 @@ def lose_screen():
         pygame.display.update()
 
 
+# ------------------------------------- LEVEL WIN SCREENS ------------------------------------ #
+
+
 def level_one_win():
+    """This function runs if you have completed level one"""
     pygame.mixer.music.stop()
     pygame.mixer.music.load('Assets/yankeedoodle.mp3')
     pygame.mixer.music.play(-1)
@@ -91,11 +107,11 @@ def level_one_win():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     return 'next'
-
         pygame.display.update()
 
 
 def level_two_win():
+    """This function runs if you have completed level one"""
     pygame.mixer.music.stop()
     pygame.mixer.music.load('Assets/yankeedoodle.mp3')
     pygame.mixer.music.play(-1)
@@ -120,6 +136,9 @@ def level_two_win():
                 if event.key == pygame.K_SPACE:
                     return 'next'
         pygame.display.update()
+
+
+# -------------------------------------------- LEVEL ONE -------------------------------------------- #
 
 
 def level_one():
@@ -212,6 +231,9 @@ def level_one():
         trump.draw(screen)
         trump.move(screen)
         pygame.display.update()
+
+
+# ------------------------------------------ LEVEL TWO -------------------------------------------- #
 
 
 def level_two():
@@ -339,6 +361,9 @@ def level_two():
         pygame.display.update()
 
 
+# ---------------------------------------- LEVEL THREE ------------------------------------------- #
+
+
 def level_three():
     pygame.mixer.music.load('Assets/level3.mp3')
     pygame.mixer.music.play(-1)
@@ -463,6 +488,11 @@ def level_three():
         if trump.lives <= 0:
             return 'lost'
         pygame.display.update()
+
+
+# -------------------------------------------- MAIN GAME LOOP --------------------------------------------- #
+
+"""This code is kind-of a mess right now. The nested if/else blocks aren't exactly ideal, but for now it runs"""
 
 
 while True:
