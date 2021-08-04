@@ -1,7 +1,6 @@
 import pygame
 import random
 
-
 # -------------------------------------- TRUMP (PLAYER) CLASS ------------------------------------------ #
 
 
@@ -136,6 +135,7 @@ class Moneybag:
 
 class Bill:
     """This is the projectile that is created when the player fires"""
+
     def __init__(self, t):
         self.x = t.x + 28
         self.y = t.y + 45
