@@ -2,7 +2,7 @@ from game_classes import Trump, Declaration, Moneybag, Bill, SecretService, Hear
 import pygame
 
 
-class Level:
+class Levels:
     """Game level class. Pass as an argument the level number and the level will play out according to
     the level specified. """
     def __init__(self, lev, screen, clock, fps):
@@ -202,3 +202,4 @@ class Level:
             self.trump.draw(self.screen)
             self.trump.move(self.screen)
             pygame.display.update()
+
