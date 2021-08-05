@@ -1,6 +1,7 @@
 from game_classes import Trump, Declaration, Moneybag, Bill, SecretService, Heart
 import pygame
 import json
+from menu_screens import Menus
 
 
 class Levels:
@@ -11,6 +12,7 @@ class Levels:
             self.data = json.load(f)
         self.screen = screen
         self.clock = clock
+        self.menu = Menus(self.screen, self.clock)
         self.FPS = fps
         self.trump = Trump()
         self.decs = []
@@ -18,25 +20,10 @@ class Levels:
         self.hearts = []
         self.agents = []
         self.bullets = []
-        # if self.lev == 2:
-        #     self.bg = pygame.image.load('Assets/level2bg.png').convert_alpha()
-        #     self.decs = [Declaration() for _ in range(11)]
-        #     self.bags = [Moneybag() for _ in range(9)]
-        #     self.agents = [SecretService() for _ in range(3)]
-        #     self.hearts = [Heart() for _ in range(3)]
-        #     self.bullets = []
-        # if self.lev == 3:
-        #     self.bg = pygame.image.load('Assets/level3bg.png').convert_alpha()
-        #     self.bg2 = pygame.image.load('Assets/level3bg2.png').convert_alpha()
-        #     self.decs = [Declaration() for _ in range(5)]
-        #     self.bags = [Moneybag() for _ in range(11)]
-        #     self.agents = [SecretService() for _ in range(5)]
-        #     self.hearts = [Heart() for _ in range(5)]
-        #     self.bullets = []
 
         # ------------------ LOAD IN GLOBAL AUDIO FILES ---------------- #
 
-        pygame.mixer.set_num_channels(16)
+        pygame.mixer.set_num_channels(32)
         self.moneycollect = pygame.mixer.Sound('Assets/moneycollect.ogg')
         self.burn = pygame.mixer.Sound('Assets/burn.ogg')
         self.wrong = pygame.mixer.Sound('Assets/wrong.ogg')
@@ -235,11 +222,12 @@ class Levels:
                 off_screen = a.move(self.screen)
                 a.counter -= eta
                 if a.counter <= 0:
-                    a.shoot_hold = False
-                    a.shoot(self.bullets)
-                    a.counter += 4000
-                    a.shoot_hold = True
-                    self.shot.play()
+                    if a.x <= 1000:
+                        a.shoot_hold = False
+                        a.shoot(self.bullets)
+                        a.counter += 4000
+                        a.shoot_hold = True
+                        self.shot.play()
                 if off_screen:
                     self.agents.remove(a)
                 for m in self.trump.money_shot[:]:
@@ -277,6 +265,7 @@ class Levels:
 
     def level_three(self):
         self.trump.reset()
+        self.bullets = []
         self.decs = [Declaration() for _ in range(self.data['level_two']['declarations_per_wave'])]
         self.bags = [Moneybag() for _ in range(self.data['level_two']['money_bags_per_wave'])]
         self.agents = [SecretService() for _ in range(self.data['level_two']['secret_service_per_wave'])]
@@ -392,3 +381,103 @@ class Levels:
             self.trump.draw(self.screen)
             self.trump.move(self.screen)
             pygame.display.update()
+
+    def level_one_victory(self):
+        pygame.mixer.music.load('Assets/yankeedoodle.mp3')
+        pygame.mixer.music.play(-1)
+        win_label = self.main_font.render('LEVEL ONE COMPLETE', True, (0, 0, 0))
+        win_label2 = self.main_font.render('PRESS SPACE TO CONTINUE', True, (0, 0, 0))
+        self.i = 0
+        self.running = True
+        while self.running:
+            self.clock.tick(self.FPS)
+            self.screen.blit(self.bg1, (self.i, 0))
+            self.screen.blit(self.bg1, (3200 + self.i, 0))
+            self.screen.blit(win_label, (200, 240))
+            self.screen.blit(win_label2, (150, 300))
+            self.i -= 2
+            if self.i == -3200:
+                self.screen.blit(self.bg1, (3200 + self.i, 0))
+                self.i = 0
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        return True
+            pygame.display.update()
+
+    def level_two_victory(self):
+        pygame.mixer.music.load('Assets/yankeedoodle.mp3')
+        pygame.mixer.music.play(-1)
+        win_label = self.main_font.render('LEVEL TWO COMPLETE', True, (0, 0, 0))
+        win_label2 = self.main_font.render('PRESS SPACE TO CONTINUE', True, (0, 0, 0))
+        self.i = 0
+        self.running = True
+        while self.running:
+            self.clock.tick(self.FPS)
+            self.screen.blit(self.bg2, (self.i, 0))
+            self.screen.blit(self.bg2, (3200 + self.i, 0))
+            self.screen.blit(win_label, (200, 240))
+            self.screen.blit(win_label2, (150, 300))
+            self.i -= 2
+            if self.i == -3200:
+                self.screen.blit(self.bg2, (3200 + self.i, 0))
+                self.i = 0
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        return True
+            pygame.display.update()
+
+    def level_three_victory(self):
+        pygame.mixer.music.load('Assets/yankeedoodle.mp3')
+        pygame.mixer.music.play(-1)
+        win_label = self.main_font.render('LEVEL THREE COMPLETE', True, (0, 0, 0))
+        win_label2 = self.main_font.render('PRESS SPACE TO CONTINUE', True, (0, 0, 0))
+        self.i = 0
+        self.running = True
+        while self.running:
+            self.clock.tick(self.FPS)
+            self.screen.blit(self.bg3a, (self.i, 0))
+            self.screen.blit(self.bg3a, (3200 + self.i, 0))
+            self.screen.blit(win_label, (200, 240))
+            self.screen.blit(win_label2, (150, 300))
+            self.i -= 2
+            if self.i == -3200:
+                self.screen.blit(self.bg3a, (3200 + self.i, 0))
+                self.i = 0
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        return True
+            pygame.display.update()
+
+    def main_game_loop(self):
+        menu_result = self.menu.main_menu()
+        if menu_result:
+            level_one_result = self.level_one()
+            if level_one_result == 'win':
+                post_level_result = self.level_one_victory()
+                if post_level_result:
+                    level_two_result = self.level_two()
+                    if level_two_result == 'win':
+                        post_level_result = self.level_two_victory()
+                        if post_level_result:
+                            level_three_result = self.level_three()
+                    elif level_two_result == 'lose':
+                        pass
+                    else:
+                        return False
+                else:
+                    return False
+            elif level_one_result == 'lose':
+                pass
+            else:
+                return False
+        if not menu_result:
+            return False

@@ -15,3 +15,8 @@ screen = pygame.display.set_mode((800, 600))
 clock = pygame.time.Clock()
 
 # --------------------- MAIN GAME LOOP --------------------- #
+
+l = Levels(screen, clock, 60)
+l.main_game_loop()
+
+
