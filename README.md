@@ -1,7 +1,7 @@
-Play as Donald Trump and wreak havoc in the cities of the USA!
+<b>WASD to Move, J to Jump, and Space to Shoot!</b>
 
 
-<h1>Make your way through Washington DC to try reach the white house!</h1
+<h1>Make your way through Washington DC to try to reach the white house!</h1
 
 
 ![Alt text](/Assets/Screenshots/level-one-screenshot.jpg)
@@ -11,6 +11,3 @@ Play as Donald Trump and wreak havoc in the cities of the USA!
 
 
 ![Alt text](/Assets/Screenshots/level-two-screenshot.jpg)
-
-
-<b>WASD to Move, J to Jump, and Space to Shoot!</b>
