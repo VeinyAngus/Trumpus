@@ -6,13 +6,13 @@
   "level_two": {
     "declarations_per_wave": 10,
     "money_bags_per_wave": 10,
-    "hearts_per_wave": 10,
-    "secret_service_per_wave": 10
+    "hearts_per_wave": 2,
+    "secret_service_per_wave": 7
   },
   "level_three": {
-    "declarations_per_wave": 10,
-    "money_bags_per_wave": 10,
-    "hearts_per_wave": 10,
+    "declarations_per_wave": 5,
+    "money_bags_per_wave": 7,
+    "hearts_per_wave": 5,
     "secret_service_per_wave": 10
   }
 }
