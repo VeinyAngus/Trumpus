@@ -21,5 +21,5 @@ class Menus:
                     self.running = False
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        pass
+                        return True
             pygame.display.update()
