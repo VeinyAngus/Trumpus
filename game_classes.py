@@ -59,6 +59,15 @@ class Trump:
                 self.jump_vel = 20
                 self.jumping = False
 
+    def reset(self):
+        self.x = 250
+        self.y = 370
+        self.lives = 5
+        self.money = 5
+        self.money_shot = []
+        self.wave = 0
+        self.agents_left = 25
+
 
 # -------------------------------------- DECLARATION CLASS ------------------------------------------- #
 
