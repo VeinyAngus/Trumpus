@@ -1,6 +1,6 @@
 import pygame
 import random
-
+import json
 # -------------------------------------- TRUMP (PLAYER) CLASS ------------------------------------------ #
 
 
@@ -9,6 +9,8 @@ class Trump:
     def __init__(self):
         self.x = 250
         self.y = 370
+        with open('config_files/level_settings.json', 'r') as f:
+            self.data = json.load(f)
         self.x_vel = 5
         self.y_vel = 5
         self.rect = pygame.Rect(self.x, self.y, 50, 100)
