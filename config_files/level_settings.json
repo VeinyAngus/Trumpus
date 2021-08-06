@@ -14,5 +14,13 @@
     "money_bags_per_wave": 7,
     "hearts_per_wave": 5,
     "secret_service_per_wave": 7
+  },
+  "controls": {
+    "up": "w",
+    "down": "s",
+    "left": "a",
+    "right": "d",
+    "jump": "j",
+    "shoot": "space"
   }
 }
