@@ -146,6 +146,7 @@ class Levels:
 
     def level_two(self):
         self.trump.reset()
+        self.obj_timer = 0
         self.decs = [Declaration() for _ in range(self.data['level_two']['declarations_per_wave'])]
         self.bags = [Moneybag() for _ in range(self.data['level_two']['money_bags_per_wave'])]
         self.agents = [SecretService() for _ in range(self.data['level_two']['secret_service_per_wave'])]
@@ -163,7 +164,7 @@ class Levels:
             self.screen.blit(money_label, (95, 12))
             self.screen.blit(heart_label, (715, 10))
             if self.obj_timer < 400:
-                obj_label = self.main_font.render(f'Collect $30 To Advance', True, (0, 255, 0))
+                obj_label = self.main_font.render(f'Collect $60 To Advance', True, (0, 255, 0))
                 self.screen.blit(obj_label, (225, 12))
             self.i -= 2
             if self.i == -3200:
@@ -213,7 +214,7 @@ class Levels:
                     self.bags.remove(b)
                     self.moneycollect.play()
                     self.trump.money += 3
-                    if self.trump.money >= 30:
+                    if self.trump.money >= 60:
                         pygame.mixer.music.stop()
                         return 'win'
                 if off_screen:
@@ -264,6 +265,7 @@ class Levels:
             pygame.display.update()
 
     def level_three(self):
+        self.obj_timer = 0
         self.trump.reset()
         self.bullets = []
         self.decs = [Declaration() for _ in range(self.data['level_two']['declarations_per_wave'])]
@@ -283,7 +285,7 @@ class Levels:
             self.screen.blit(money_label, (95, 12))
             self.screen.blit(heart_label, (715, 10))
             if self.obj_timer < 400:
-                obj_label = self.main_font.render(f'Collect $30 To Advance', True, (0, 255, 0))
+                obj_label = self.main_font.render(f'Kill 25 Agents To Advance', True, (0, 255, 0))
                 self.screen.blit(obj_label, (225, 12))
             self.i -= 2
             if self.i == -3200:

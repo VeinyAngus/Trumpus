@@ -1,26 +1,18 @@
 {
   "level_one": {
-    "declarations_per_wave": 10,
-    "money_bags_per_wave": 10
+    "declarations_per_wave": 6,
+    "money_bags_per_wave": 12
   },
   "level_two": {
     "declarations_per_wave": 10,
-    "money_bags_per_wave": 10,
+    "money_bags_per_wave": 14,
     "hearts_per_wave": 2,
-    "secret_service_per_wave": 5
+    "secret_service_per_wave": 6
   },
   "level_three": {
     "declarations_per_wave": 5,
-    "money_bags_per_wave": 7,
-    "hearts_per_wave": 5,
-    "secret_service_per_wave": 7
-  },
-  "controls": {
-    "up": "w",
-    "down": "s",
-    "left": "a",
-    "right": "d",
-    "jump": "j",
-    "shoot": "space"
+    "money_bags_per_wave": 15,
+    "hearts_per_wave": 1,
+    "secret_service_per_wave": 10
   }
 }
