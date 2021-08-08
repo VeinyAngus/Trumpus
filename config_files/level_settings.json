@@ -14,5 +14,8 @@
     "money_bags_per_wave": 15,
     "hearts_per_wave": 1,
     "secret_service_per_wave": 10
+  },
+  "additional_settings": {
+    "music": "on"
   }
 }
