@@ -7,6 +7,7 @@ class Menus:
         self.clock = clock
         self.main_menu_bg = pygame.image.load('Assets/mainmenu.png').convert_alpha()
         self.settings_bg = pygame.image.load('Assets/settings.png').convert_alpha()
+        self.click_sound = pygame.mixer.Sound('Assets/click.ogg')
         self.font = pygame.font.SysFont('arial', 50)
         self.start_rect = pygame.Rect(58, 485, 210, 78)
         self.settings_rect = pygame.Rect(523, 485, 210, 78)
@@ -27,6 +28,7 @@ class Menus:
                 if event.type == pygame.QUIT:
                     return 'quit'
                 if event.type == pygame.MOUSEBUTTONUP:
+                    self.click_sound.play()
                     if self.mouse_rect.colliderect(self.start_rect):
                         print('start click')
                         pygame.draw.rect(self.screen, (255, 255, 255), self.start_rect, 2)
@@ -47,6 +49,7 @@ class Menus:
                 if event.type == pygame.QUIT:
                     return 'quit'
                 if event.type == pygame.MOUSEBUTTONUP:
+                    self.click_sound.play()
                     if self.mouse_rect.colliderect(self.menu_rect):
                         pygame.draw.rect(self.screen, (255, 255, 255), self.menu_rect, 2)
                         return 'menu'
