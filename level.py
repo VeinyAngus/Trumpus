@@ -481,14 +481,18 @@ class Levels:
                             postgame_two = self.level_two_victory()
                             if postgame_two == 'next':
                                 level_three_result = self.level_three()
+                                if level_three_result == 'win':
+                                    continue  # TODO you win screen for now, final boss in future
+                                if level_three_result == 'lost':
+                                    pass  # TODO lose screen
                             if postgame_two == 'quit':
                                 self.running = False
                         if level_two_result == 'lost':
-                            pass  # TODO
+                            pass  # TODO lose screen
                     if postgame_one == 'quit':
                         self.running = False
                 if level_one_result == 'lost':
-                    pass
+                    pass  # TODO lose screen
                 if level_one_result == 'quit':
                     self.running = False
             if menu_result == 'quit':
