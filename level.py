@@ -335,9 +335,6 @@ class Levels:
                     self.bags.remove(b)
                     self.moneycollect.play()
                     self.trump.money += 3
-                    if self.trump.money >= 30:
-                        pygame.mixer.music.stop()
-                        return 'win'
                 if off_screen:
                     self.bags.remove(b)
             for a in self.agents[:]:
@@ -356,6 +353,9 @@ class Levels:
                         self.agents.remove(a)
                         self.scream.play()
                         self.trump.money_shot.remove(m)
+                        self.trump.agents_left -= 1
+                        if self.trump.agents_left <= 0:
+                            return 'win'
                     else:
                         pass
             for b in self.bullets[:]:
@@ -380,6 +380,8 @@ class Levels:
             if self.trump.lives <= 0:
                 pygame.mixer.music.stop()
                 return 'lost'
+            agent_label = self.main_font.render(f'Agents Left: {self.trump.agents_left}', True, (255, 255, 255))
+            self.screen.blit(agent_label, (35, 550))
             self.trump.draw(self.screen)
             self.trump.move(self.screen)
             pygame.display.update()
@@ -403,10 +405,10 @@ class Levels:
                 self.i = 0
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
+                    return 'quit'
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        return True
+                        return 'next'
             pygame.display.update()
 
     def level_two_victory(self):
@@ -428,10 +430,10 @@ class Levels:
                 self.i = 0
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
+                    return 'quit'
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        return True
+                        return 'next'
             pygame.display.update()
 
     def level_three_victory(self):
@@ -453,33 +455,45 @@ class Levels:
                 self.i = 0
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
+                    return 'quit'
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        return True
+                        return 'next'
             pygame.display.update()
 
     def main_game_loop(self):
-        menu_result = self.menu.main_menu()
-        if menu_result:
-            level_one_result = self.level_one()
-            if level_one_result == 'win':
-                post_level_result = self.level_one_victory()
-                if post_level_result:
-                    level_two_result = self.level_two()
-                    if level_two_result == 'win':
-                        post_level_result = self.level_two_victory()
-                        if post_level_result:
-                            level_three_result = self.level_three()
-                    elif level_two_result == 'lose':
-                        pass
-                    else:
-                        return False
-                else:
-                    return False
-            elif level_one_result == 'lose':
-                pass
-            else:
-                return False
-        if not menu_result:
-            return False
+        self.running = True
+        while self.running:
+            menu_result = self.menu.main_menu()
+            if menu_result == 'settings':
+                settings_result = self.menu.settings()
+                if settings_result == 'menu':
+                    continue
+                if settings_result == 'quit':
+                    self.running = False
+            if menu_result == 'start':
+                level_one_result = self.level_one()
+                if level_one_result == 'win':
+                    postgame_one = self.level_one_victory()
+                    if postgame_one == 'next':
+                        level_two_result = self.level_two()
+                        if level_two_result == 'win':
+                            postgame_two = self.level_two_victory()
+                            if postgame_two == 'next':
+                                level_three_result = self.level_three()
+                                if level_three_result == 'win':
+                                    continue  # TODO you win screen for now, final boss in future
+                                if level_three_result == 'lost':
+                                    pass  # TODO lose screen
+                            if postgame_two == 'quit':
+                                self.running = False
+                        if level_two_result == 'lost':
+                            pass  # TODO lose screen
+                    if postgame_one == 'quit':
+                        self.running = False
+                if level_one_result == 'lost':
+                    pass  # TODO lose screen
+                if level_one_result == 'quit':
+                    self.running = False
+            if menu_result == 'quit':
+                self.running = False
