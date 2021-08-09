@@ -267,3 +267,25 @@ class Heart:
         self.draw(s)
         if self.x < -50:
             return True
+
+
+# ----------------------------------- SPEAKER CLASS --------------------------------------- #
+
+
+class Speaker:
+    def __init__(self):
+        self.x = 75
+        self.y = 500
+        self.on_img = pygame.image.load('Assets/speaker_on.png').convert_alpha()
+        self.off_img = pygame.image.load('Assets/speaker_off.png').convert_alpha()
+        self.rect = pygame.Rect(self.x, self.y, 50, 50)
+        self.default_img = self.on_img
+
+    def draw(self, s):
+        s.blit(self.default_img, (self.x, self.y))
+
+    def flip(self):
+        if self.default_img == self.on_img:
+            self.default_img = self.off_img
+        else:
+            self.default_img = self.on_img

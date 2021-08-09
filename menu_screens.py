@@ -1,8 +1,9 @@
 import pygame
+from game_classes import Speaker
 
 
 class Menus:
-    def __init__(self, screen, clock):
+    def __init__(self, screen, clock, speaker):
         self.screen = screen
         self.clock = clock
         self.main_menu_bg = pygame.image.load('Assets/mainmenu.png').convert_alpha()
@@ -14,6 +15,7 @@ class Menus:
         self.menu_rect = pygame.Rect(300, 485, 190, 66)
         self.mouse_rect = pygame.Rect(50, 50, 5, 5)
         self.running = True
+        self.speaker = speaker
         self.FPS = 60
         pygame.mixer.music.load('Assets/starspangled.mp3')
         pygame.mixer.music.play(-1)
@@ -53,5 +55,12 @@ class Menus:
                     if self.mouse_rect.colliderect(self.menu_rect):
                         pygame.draw.rect(self.screen, (255, 255, 255), self.menu_rect, 2)
                         return 'menu'
+                    if self.mouse_rect.colliderect(self.speaker.rect):
+                        self.speaker.flip()
+                        if self.speaker.default_img == self.speaker.off_img:
+                            pygame.mixer.music.stop()
+                        if self.speaker.default_img == self.speaker.on_img:
+                            pygame.mixer.music.play(-1)
+            self.speaker.draw(self.screen)
             pygame.draw.rect(self.screen, (255, 0, 0), self.menu_rect, 2)
             pygame.display.update()

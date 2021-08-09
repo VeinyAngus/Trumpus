@@ -1,4 +1,4 @@
-from game_classes import Trump, Declaration, Moneybag, Bill, SecretService, Heart
+from game_classes import Trump, Declaration, Moneybag, Bill, SecretService, Heart, Speaker
 import pygame
 import json
 from menu_screens import Menus
@@ -12,7 +12,8 @@ class Levels:
             self.data = json.load(f)
         self.screen = screen
         self.clock = clock
-        self.menu = Menus(self.screen, self.clock)
+        self.speaker = Speaker()
+        self.menu = Menus(self.screen, self.clock, self.speaker)
         self.FPS = fps
         self.trump = Trump()
         self.decs = []
@@ -57,8 +58,9 @@ class Levels:
         """Level One method"""
         self.decs = [Declaration() for _ in range(self.data['level_one']['declarations_per_wave'])]
         self.bags = [Moneybag() for _ in range(self.data['level_one']['money_bags_per_wave'])]
-        pygame.mixer.music.load('Assets/level1.mp3')
-        pygame.mixer.music.play(-1)
+        if self.speaker.default_img == self.speaker.on_img:
+            pygame.mixer.music.load('Assets/level1.mp3')
+            pygame.mixer.music.play(-1)
         while self.running:
             self.obj_timer += 1
             self.clock.tick(60)  # Set FPS To 60
@@ -150,8 +152,9 @@ class Levels:
         self.decs = [Declaration() for _ in range(self.data['level_two']['declarations_per_wave'])]
         self.bags = [Moneybag() for _ in range(self.data['level_two']['money_bags_per_wave'])]
         self.agents = [SecretService() for _ in range(self.data['level_two']['secret_service_per_wave'])]
-        pygame.mixer.music.load('Assets/level2.mp3')
-        pygame.mixer.music.play(-1)
+        if self.speaker.default_img == self.speaker.on_img:
+            pygame.mixer.music.load('Assets/level2.mp3')
+            pygame.mixer.music.play(-1)
         while self.running:
             self.obj_timer += 1
             eta = self.clock.tick(60)  # Set FPS To 60
@@ -271,8 +274,9 @@ class Levels:
         self.decs = [Declaration() for _ in range(self.data['level_two']['declarations_per_wave'])]
         self.bags = [Moneybag() for _ in range(self.data['level_two']['money_bags_per_wave'])]
         self.agents = [SecretService() for _ in range(self.data['level_two']['secret_service_per_wave'])]
-        pygame.mixer.music.load('Assets/level3.mp3')
-        pygame.mixer.music.play(-1)
+        if self.speaker.default_img == self.speaker.on_img:
+            pygame.mixer.music.load('Assets/level3.mp3')
+            pygame.mixer.music.play(-1)
         while self.running:
             self.obj_timer += 1
             eta = self.clock.tick(60)  # Set FPS To 60
@@ -387,8 +391,9 @@ class Levels:
             pygame.display.update()
 
     def level_one_victory(self):
-        pygame.mixer.music.load('Assets/yankeedoodle.mp3')
-        pygame.mixer.music.play(-1)
+        if self.speaker.default_img == self.speaker.on_img:
+            pygame.mixer.music.load('Assets/yankeedoodle.mp3')
+            pygame.mixer.music.play(-1)
         win_label = self.main_font.render('LEVEL ONE COMPLETE', True, (0, 0, 0))
         win_label2 = self.main_font.render('PRESS SPACE TO CONTINUE', True, (0, 0, 0))
         self.i = 0
@@ -412,8 +417,9 @@ class Levels:
             pygame.display.update()
 
     def level_two_victory(self):
-        pygame.mixer.music.load('Assets/yankeedoodle.mp3')
-        pygame.mixer.music.play(-1)
+        if self.speaker.default_img == self.speaker.on_img:
+            pygame.mixer.music.load('Assets/yankeedoodle.mp3')
+            pygame.mixer.music.play(-1)
         win_label = self.main_font.render('LEVEL TWO COMPLETE', True, (0, 0, 0))
         win_label2 = self.main_font.render('PRESS SPACE TO CONTINUE', True, (0, 0, 0))
         self.i = 0
@@ -437,8 +443,9 @@ class Levels:
             pygame.display.update()
 
     def level_three_victory(self):
-        pygame.mixer.music.load('Assets/yankeedoodle.mp3')
-        pygame.mixer.music.play(-1)
+        if self.speaker.default_img == self.speaker.on_img:
+            pygame.mixer.music.load('Assets/yankeedoodle.mp3')
+            pygame.mixer.music.play(-1)
         win_label = self.main_font.render('LEVEL THREE COMPLETE', True, (0, 0, 0))
         win_label2 = self.main_font.render('PRESS SPACE TO CONTINUE', True, (0, 0, 0))
         self.i = 0
@@ -484,15 +491,15 @@ class Levels:
                                 if level_three_result == 'win':
                                     continue  # TODO you win screen for now, final boss in future
                                 if level_three_result == 'lost':
-                                    pass  # TODO lose screen
+                                    continue  # TODO lose screen
                             if postgame_two == 'quit':
                                 self.running = False
                         if level_two_result == 'lost':
-                            pass  # TODO lose screen
+                            continue  # TODO lose screen
                     if postgame_one == 'quit':
                         self.running = False
                 if level_one_result == 'lost':
-                    pass  # TODO lose screen
+                    continue  # TODO lose screen
                 if level_one_result == 'quit':
                     self.running = False
             if menu_result == 'quit':
